@@ -1,0 +1,469 @@
+<?php session_start(); 
+
+$userid = $_SESSION['userid']; 
+print_r($_SESSION);
+
+?>
+
+
+<!DOCTYPE HTML>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1"> 
+    <title>Nasa Feedback</title>
+    <link rel="stylesheet" href="http://code.jquery.com/mobile/1.0b3/jquery.mobile-1.0b3.min.css">
+    <link rel="stylesheet" href="_assets/css/jquery.emojiarea.css">
+    <link rel="stylesheet" href="_assets/css/stylesheet.css">    
+    <link rel="shortcut icon" href="favicon.ico">
+    <!-- JavaScript HTML requirements -->
+    <script src="http://code.jquery.com/jquery-1.6.3.min.js"></script>
+    <script src="http://code.jquery.com/mobile/1.0b3/jquery.mobile-1.0b3.min.js"></script>
+    <!-- <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script> -->
+    <script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?sensor=false"></script> 
+    <script type="text/javascript" src="_assets/js/jquery.emojiarea.js"></script>
+    <script type="text/javascript" src="_assets/basic/emojis.js"></script>
+</head>
+
+ <script type="text/JavaScript">
+  // This is usess google geolocation to get the location from a the user
+  
+   
+   $('#logout').click(function(){
+       
+         var logout = 1;
+         $.ajax({
+                url: "logout.php",
+                type: "POST",
+                data: {logout : logout}, 
+            }).done(function(msg) {
+            
+                 alert(msg);
+            });
+         });
+
+ </script>
+<body onload="initialize()">
+<div data-role="page" id="home">
+    <header data-role="header">
+        <h1>Nasa Feedback</h1>
+        
+        <div data-role="navbar">
+        <ul>
+            <li><a href="#home" data-icon="home" data-theme="b" class="ui-btn-active">Home</a></li>
+            <li><a href="#feedback" data-icon="grid" data-theme="b">Feed back</a></li>
+            <li><a href="#contact" data-icon="grid" data-theme="b">Contact Us</a></li>
+        </ul>
+        </div>
+    </header>
+    
+    <section data-role="content">
+
+            <!-- <h4>Nasa Feedback</h4> -->
+            <p style="text-align:center;">
+                 <img id="logo" src="images/NASA-OR.png" alt="NASA">
+            </p>
+        
+    </section>
+       
+    <footer data-role="footer" data-position="fixed">
+        <h4>&copy; 2013</h4>
+        <div data-role="navbar">
+            <ul>
+             
+              <li><a href='' id='logout' data-icon='star' data-theme='b'>logout</a></li>
+              <li><a href='#login' data-icon='star' data-theme='b'>Login</a></li>
+              <li><a href='#register' data-icon='star' data-theme='b'>Register</a></li>               
+              
+           </ul>
+        </div>    
+    </footer>
+</div>
+
+<div data-role="page" id="login">
+    <header data-role="header">
+        <h1>Nasa Feedback</h1>
+        <div data-role="navbar">
+        <ul>
+            <li><a href="#home" data-icon="home" data-theme="b" >Home</a></li>
+            <li><a href="#feedback" data-icon="grid" data-theme="b">Feed back</a></li>
+            <li><a href="#contact" data-icon="grid" data-theme="b">Contact Us</a></li>
+        </ul>
+    </div>
+    </header>
+      
+    <section data-role="content">
+          <form action="" id="login" data-transition="flip">
+
+            <input type="text" name="user" id="user" value="" placeholder="Username">
+            <input type="password" name="pass" id="pass" value="" placeholder="Password">
+            <input type="button" data-transition="flip" value="Login" id="login_submit" data-theme="b" data-icon="arrow-r" data-iconpos="right">
+
+          </form>
+
+          <script type="text/javascript">
+               
+                $('#login_submit').click(function(){
+
+                    var Username = $('#user').val();
+                    var Pword = $('#pass').val();
+
+                    if(Username.length > 0 && Pword.length > 0) {
+                        $.ajax({
+                            url: "login.php",
+                            type: "POST",
+                            data: {username : Username, password : Pword}, 
+                        }).done(function(msg) {
+                        
+                             alert(msg);
+                        });
+
+                    } else {
+                        alert ('Username or Password Required');
+                    } 
+                   
+                });
+ 
+          </script>  
+    </section>
+       
+    <footer data-role="footer" data-position="fixed">
+        <h4>&copy; 2013</h4>
+        <div data-role="navbar">
+            <ul>
+              <li><a href="#login" data-icon="star" data-theme="b">Login</a></li>
+              <li><a href="#register" data-icon="star" data-theme="b">Register</a></li>
+           </ul>
+        </div>    
+    </footer>
+</div>
+
+<div data-role="page" id="register">
+    <header data-role="header">
+        <h1>Nasa Feedback</h1>
+        <div data-role="navbar">
+            <ul>
+                <li><a href="#home" data-icon="home" data-theme="b" >Home</a></li>
+                <li><a href="#feedback" data-icon="grid" data-theme="b">Feed back</a></li>
+                <li><a href="#contact" data-icon="grid" data-theme="b">Contact Us</a></li>
+            </ul>
+        </div>
+    </header>
+      
+    <section data-role="content">
+        <!-- Registration Form-->        
+        <form action="" data-transition="flip">
+
+            <input type="text" name="user" id="user" value="" placeholder="Username">
+            <input type="password" name="pass" id="pass" value="" placeholder="Password">
+            <input type="text" name="name" id="name" value="" placeholder="Name">
+            <input type="text" name="Surnamae" id="surname" value="" placeholder="Surname">
+            <input type="Email" name="Email" id="email" value="" placeholder="Email">
+            <select name="gender" id="gender">
+                <option value="Male">Male</option>
+                <option value="Female">Female</option>
+            </select>
+            <input type="date" name="date" id="date" value="" placeholder="Date of Birth">
+
+            <input type="button" data-transition="flip" value="Register" id="register_button" data-theme="b" data-icon="arrow-r" data-iconpos="right">
+
+        </form>
+       
+        <a href="#register-form" data-rel="dialog" id="forminvalid" data-transition="pop"></a>
+        
+        <script type="text/javascript">
+            
+            $('#register_button').click(function(){
+               
+               var usern = $('#user').val();    
+               var passw = $('#pass').val();    
+               var name = $('#name').val();    
+               var surname = $('#surname').val();    
+               var gender = $('#gender').val();    
+               var email = $('#email').val();
+               var dateofbirth = $('#date').val();    
+              
+                function isValidEmailAddress(emailAddress) {
+                 var pattern = new RegExp(/^[+a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/i);
+                // alert( pattern.test(emailAddress) );
+                  return pattern.test(emailAddress);
+                };
+               
+               
+               if(usern.length > 0  && passw.length > 0 && name.length > 0 && surname.length > 0 && email.length > 0  && isValidEmailAddress(email) ) {
+                  // Ajax call to the registration script
+                  $.ajax({ 
+                            url: "register.php",
+                            type: "POST",
+                            data: {username : usern, password : passw, firstname : name, lastname : surname, gender : gender, email : email,  dob : dateofbirth}, 
+                  }).done(function(msg) {
+                        
+                             alert(msg);
+                  }); 
+
+               } else {
+
+                  if(!isValidEmailAddress( email ) ) {
+                     alert('Please enter a valid email address');
+                  } else {
+                    $('#forminvalid').click();
+                  }
+                   
+
+               }
+            
+               
+            });
+             
+        </script>
+   
+
+    </section>
+       
+    <footer data-role="footer" data-position="fixed">
+        <h4>&copy; 2013</h4>
+        <div data-role="navbar">
+            <ul>
+              <li><a href="#login" data-icon="star" data-theme="b">Login</a></li>
+              <li><a href="#register" data-icon="star" data-theme="b">Register</a></li>
+           </ul>
+        </div>    
+    </footer>
+</div>
+
+<div data-role="page" id="contact">
+    <header data-role="header">
+        <h1>Nasa Feedback</h1>
+        <div data-role="navbar">
+        <ul>
+            <li><a href="#home" data-icon="home" data-theme="b" >Home</a></li>
+            <li><a href="#feedback" data-icon="grid" data-theme="b">Feed back</a></li>
+            <li><a href="#contact" data-icon="grid" data-theme="b" class="ui-btn-active">Contact Us</a></li>
+        </ul>
+    </div>
+    </header>
+      
+    <section data-role="content" style="text-align:center;">
+        <p> Contact Nasa</p>
+
+        <p>
+         Public Communications Office
+         NASA Headquarters <br />
+         Suite 5K39 <br />
+         Washington, DC 20546-000 <br />
+         (202) 358-0000  (Office) <br />
+         (202) 358-4338 (Fax) <br />
+        </p>
+
+    </section>
+       
+    <footer data-role="footer" data-position="fixed">
+        <h4>&copy; 2013</h4>
+        <div data-role="navbar">
+            <ul>
+              <li><a href='' id='logout' data-icon='star' data-theme='b'>logout</a></li>
+              <li><a href='#login' data-icon='star' data-theme='b'>Login</a></li>
+              <li><a href='#register' data-icon='star' data-theme='b'>Register</a></li>               
+               </ul>
+        </div>    
+    </footer>
+</div>
+
+
+<div data-role="page" id="feedback">
+    <header data-role="header">
+        <h1>Nasa Feedback</h1>
+        <div data-role="navbar">
+            <ul>
+                <li><a href="#home" data-icon="home" data-theme="b" >Home</a></li>
+                <li><a href="#feedback" data-icon="grid" data-theme="b" class="ui-btn-active">Feed back</a></li>
+                <li><a href="#contact" data-icon="grid" data-theme="b">Contact Us</a></li>
+            </ul>
+        </div>
+    </header>
+    <section data-role="content">
+         
+          <form action=""  > 
+            <div class="formItem">
+                <p><label for="select-native-1">Your programs today:</label></p>
+                <select name="programs" id="programs">
+                    <option value="Achieving Competence in Computing, Engineering and Space Science">Achieving Competence in Computing, Engineering and Space Science </option>
+                    <option value="Aerospace Education Services Project">Aerospace Education Services Project </option>
+                    <option value="Marshall Robotics Academy">Marshall Robotics Academy </option>
+                    <option value="Virginia Summer Residential Governor's Schools">Virginia Summer Residential Governor's Schools </option>
+                </select>
+            </div>
+
+            <textarea rows="5" class="emotions" id="description"></textarea>
+            
+            <select name="emotions" id="emotions">
+                    <option value="angry"><img id="angry" src="images/angry.png" /> Angry</option>
+                    <option value="happy"><img id="angry"  src="images/happy.png" /> Happy </option>
+                    <option value="sad"><img id="angry"  src="images/sad.png" /> Sad </option>
+                    <option value="frustated"><img id="angry" src="images/frustrated.png" />Frustateds</option>
+            </select> 
+
+           <p>
+            <input type="button" id="feedback_submit" data-transition="flip" value="Submit" data-theme="b" data-icon="arrow-r" data-iconpos="right">
+            <a href="#" data-role="button" data-rel="back" data-theme="b" data-icon="arrow-l" data-iconpos="right">Back to previous page</a>
+           </p>
+
+         </form>
+
+         <script type="text/javascript">
+             // Javascript to get address from google maps api
+             var geocoder;
+              var fulladdress; 
+
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(successFunction, errorFunction);
+               
+            } 
+  
+        //Get the latitude and the longitude;
+        function successFunction(position) {
+          var lat = position.coords.latitude;
+          var lng = position.coords.longitude;
+          codeLatLng(lat, lng)
+
+        }  
+
+        function errorFunction(){
+          alert("Geocoder failed");
+        }
+
+        function initialize() {
+          geocoder = new google.maps.Geocoder();
+        }
+
+        function codeLatLng(lat, lng) {
+
+          var latlng = new google.maps.LatLng(lat, lng);
+    
+            geocoder.geocode({'latLng': latlng}, function(results, status) {
+            if (status == google.maps.GeocoderStatus.OK) {
+              console.log(results)
+              if (results[1]) {
+              //formatted address
+              // alert(results[0].formatted_address)
+              fulladdress = results[0].formatted_address;
+              //find country name
+            for (var i=0; i<results[0].address_components.length; i++) {
+                for (var b=0;b<results[0].address_components[i].types.length;b++) {
+
+                 //
+                   if (results[0].address_components[i].types[b] == "administrative_area_level_1") {
+                    //this is the object you are looking for
+                       city= results[0].address_components[i];
+                       break;
+                   }
+                }
+            }
+           //city data
+            //alert(city.short_name + " " + city.long_name)
+            var city = city.long_name;
+        } else {
+          alert("No results found");
+        }
+      } else {
+        alert("Geocoder failed due to: " + status);
+      }
+    });
+     
+     
+  }          
+ 
+
+            $('#feedback_submit').click(function(){
+    
+          
+
+                var description = $('#description').val();
+                var emoticon = $('#emotions').val();
+                var programs = $('#programs').val();
+
+                //alert(fulladdress);
+
+                if(description.length > 0) {
+              
+                    // Ajax call to the registration script
+                    $.ajax({ 
+                            url: "add_feedback.php",
+                            type: "POST",
+                            data: {description : description, emoticon : emoticon, programs : programs, location : fulladdress}, 
+                    }).done(function(msgs) {
+                        
+                             alert(msgs);
+                    }); 
+
+                } else {
+
+                    alert('Please fill in description');
+                }
+
+
+            });
+
+         </script>
+    </section>
+       
+    <footer data-role="footer" data-position="fixed">
+        <h4>&copy; 2013</h4>
+        <div data-role="navbar">
+            <ul>
+              <li><a href="#login" data-icon="star" data-theme="b">Login</a></li>
+              <li><a href="#register" data-icon="star" data-theme="b">Register</a></li>
+           </ul>
+        </div>    
+    </footer>
+</div>
+
+
+<div data-role="page" id="feedback_view">
+    <header data-role="header">
+        <h1>Nasa Feedback</h1>
+        <div data-role="navbar">
+            <ul>
+                <li><a href="#home" data-icon="home" data-theme="b" >Home</a></li>
+                <li><a href="#feedback_view" data-icon="grid" data-theme="b" class="ui-btn-active">Feed back</a></li>
+                <li><a href="#contact" data-icon="grid" data-theme="b">Contact Us</a></li>
+            </ul>
+        </div>
+    </header>
+    <section data-role="content">
+         
+          
+    </section>
+       
+    <footer data-role="footer" data-position="fixed">
+        <h4>&copy; 2013</h4>
+        <div data-role="navbar">
+            <ul>
+              
+             <li><a href='' id='logout' data-icon='star' data-theme='b'>logout</a></li>
+              <li><a href='#login' data-icon='star' data-theme='b'>Login</a></li>
+              <li><a href='#register' data-icon='star' data-theme='b'>Register</a></li>               
+              
+           </ul>
+        </div>    
+    </footer>
+</div>
+
+
+
+<div data-role="page" id="register-form">
+  
+    <div data-role="header" data-theme="d">
+       <h1>Register</h1>
+
+    </div>
+
+    <div data-role="content" data-theme="c">
+     
+      <p>Please make sure that all form fiels are fields</p>
+      <a href="#register" data-role="button" data-rel="back" data-theme="b">OK</a>          
+    </div>
+  </div>
+
+</body>
+</html>
